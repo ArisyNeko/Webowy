@@ -1,4 +1,4 @@
-window.alert("Do not forget to play by rules");
+/*window.alert("Do not forget to play by rules");
 
 class Main{
     draw(){
@@ -13,4 +13,5 @@ function write(s: string) {
 
 let object = new Main();
 
-let on_click = () => { object.draw();}
+let on_click = () => { object.draw();}*/
+
