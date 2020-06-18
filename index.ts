@@ -2,7 +2,7 @@ window.alert("Do not forget to play by rules");
 
 class Main{
     draw(){
-        write("written22")
+        write("written")
     }
 }
 
