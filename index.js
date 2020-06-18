@@ -1,14 +1,30 @@
-window.alert("Do not forget to play by rules");
-var Main = (function () {
-    function Main() {
+//window.alert("kek");
+var Cells = (function () {
+    function Cells() {
     }
-    Main.prototype.draw = function () {
-        write("written");
+    Cells.prototype.one_cell = function (width, hight) {
+        this.x = width;
+        this.y = hight;
     };
-    return Main;
+    return Cells;
 })();
-function write(s) {
-    document.getElementById('h').innerHTML = s;
+var Brain = (function () {
+    function Brain() {
+    }
+    Brain.prototype.drow = function () {
+        game('krk');
+    };
+    Brain.prototype.refresh = function () {
+        setTimeout(function () { window.location.reload(); }, 1000);
+    };
+    return Brain;
+})();
+function game(s) {
+    document.getElementById('2').innerHTML = s;
 }
-var object = new Main();
-var on_click = function () { object.draw(); };
+;
+var brain = new Brain();
+var on_click = function () {
+    brain.drow();
+    //brain.refresh();
+};
