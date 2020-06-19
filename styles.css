@@ -1,45 +1,34 @@
 *, *::after, *::before {
-    box-sizing: border-box;
-  }
-  :root {
-    --cell-size: 100px;
-    --mark-size: calc(var(--cell-size) * .9);
-  }
-  
-  
-  body {
-    margin: 0;
-  }
-  #test {
-    color: green;
+  box-sizing: border-box;
+}
 
- 
-  }
-  #restartButton{
-    top: 50px;
-    background-color: green;
-  }
-  
-  .board {
-    width: 100vw;
-    height: 100vh;
-    display: grid;
-    justify-content: center;
-    align-content: center;
-    justify-items: center;
-    align-items: center; 
-    grid-template-columns: repeat(10, auto)
-  }
+:root {
+  --cell-size: 70px;
+  --mark-size: calc(var(--cell-size) * .8);
+}
 
-  
-  .cell {
-    width: var(--cell-size);
-    height: var(--cell-size);
-    border: 1px solid black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    cursor: pointer;
-  }
-  
+body {
+  margin: 0;
+}
+
+.board {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: center;
+  grid-template-columns: repeat(5, auto)
+}
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}

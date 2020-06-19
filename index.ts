@@ -1,31 +1,40 @@
-//window.alert("kek");
-class Cells{
-    private x: number;
-    private y: number;
-    
-    one_cell(width: number, hight: number){
-
-       this.x = width; 
-       this.y = hight;
-       
-    }
-}
-class Brain {
-
-    drow() {
-        game('krk');
-    }
-    refresh(){
+class Animal {
+    public things: boolean[][];
+    constructor() {
+        this.things =[];
         
-        setTimeout(() => {window.location.reload();}, 1000);
+        for(var i: number = 0; i <= 4; i++) {
+            this.things[i]=[];
+            
+            for(var j: number = 0; j<= 4 ; j++) {
+                if(Math.floor(Math.random() * Math.floor(11))<3){
+                    this.things[i][j] = true;
+                }else{
+                    this.things[i][j] = false;
+                }
+            } 
+        }
     }
+    
+    
+    handleClick(row:number, column : number) {
+        console.log(this.things);
+        
+        if(this.things[row][column]==true){
+            console.log("you lose");
+        }
+    }
+
 }
 
-function game(s: string) {
-    document.getElementById('2').innerHTML = s;
-};
-let brain = new Brain();
-let on_click = () => {
-    brain.drow();
-    //brain.refresh();
-};
+
+let dog = new Animal();
+
+
+function ChangeCellBoolean (id : number)
+{
+    let element = document.getElementById(id.toString());
+    console.log(element)
+
+    dog.handleClick( Number(element.getAttribute("row")), Number(element.getAttribute("column")));
+}
