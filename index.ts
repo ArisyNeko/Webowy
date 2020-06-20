@@ -10,7 +10,7 @@ class Animal {
             this.things[i]=[];
             
             for(var j: number = 0; j<= 4 ; j++) {
-                if(Math.floor(Math.random() * Math.floor(11))<3){
+                if(Math.floor(Math.random() * Math.floor(11))<2){
                     this.things[i][j] = true;
                     this.bombs++;
                 }else{
@@ -24,26 +24,29 @@ class Animal {
         console.log(this.bombs);
         
     }
-
+    
     handleClick(row:number, column:number, element:HTMLElement) {
-
-        this.clicks++;
-
-
-        if(this.clicks != 1){
+        if(this.clicks != 0){
             if(this.things[row][column]==true){
                 element.parentElement.innerHTML="<div class='solution'>X<div/>";
-                alert("You lost the game! Score: "+ this.clicks);
-                window.location.reload();
+                const clicks = this.clicks;
+                this.showResult();
+                setTimeout(function(){ alert("You lost the game! Score: "+ clicks);
+                window.location.reload();}, 1000);
+                
             }else{
+                this.clicks++;
                 let quantity = this.countBombsAround(row,column);
                 //заміняю внутрєнность кнопки (баттон) на другий дів з моїм параметром квонтіті
                 element.parentElement.innerHTML="<div class='solution'>" + quantity + "<div/>";
                 this.checkwin();
             }
         }else{
+            this.clicks++;
+            if(this.things[row][column]==true){
             this.bombs--;
             this.things[row][column]=false;
+            }
             let quantity = this.countBombsAround(row,column);
             element.parentElement.innerHTML="<div class='solution'>" + quantity + "<div/>";
             this.checkwin();
@@ -63,16 +66,30 @@ class Animal {
         return quantity;
     }
     checkwin(){
-        console.log("bombs: ");
-        console.log(25-this.bombs);
-        console.log("clicks: ");
-        console.log(this.clicks);
-        if(this.clicks==(24-this.bombs)){
-            alert("You win this game! Score: "+ this.clicks)
-            window.location.reload();
+        if(this.clicks==(25-this.bombs)){
+            this.showResult();
+            const clicks = this.clicks;
+            setTimeout(function(){ alert("You won the game! Score: "+ clicks);
+                window.location.reload();}, 1000);
         }
     }
-    
+
+    showResult(){
+
+        let el;
+        for(var i:number = 1; i<=25;i++){
+
+            el = document.getElementById("a"+i.toString());
+            if(el){
+
+                const row = Number(el.getAttribute("row"));
+                const column = Number(el.getAttribute("column"));
+                if(this.things[row][column] == true) {
+                    el.parentElement.innerHTML = "<div class='solution'>X<div/>";
+                }
+            }
+        }
+    }
 }
 
 

@@ -7,7 +7,7 @@ var Animal = (function () {
         for (var i = 0; i <= 4; i++) {
             this.things[i] = [];
             for (var j = 0; j <= 4; j++) {
-                if (Math.floor(Math.random() * Math.floor(11)) < 3) {
+                if (Math.floor(Math.random() * Math.floor(11)) < 2) {
                     this.things[i][j] = true;
                     this.bombs++;
                 }
@@ -22,14 +22,18 @@ var Animal = (function () {
         console.log(this.bombs);
     };
     Animal.prototype.handleClick = function (row, column, element) {
-        this.clicks++;
-        if (this.clicks != 1) {
+        if (this.clicks != 0) {
             if (this.things[row][column] == true) {
                 element.parentElement.innerHTML = "<div class='solution'>X<div/>";
-                alert("You lost the game! Score: " + this.clicks);
-                window.location.reload();
+                var clicks = this.clicks;
+                this.showResult();
+                setTimeout(function () {
+                    alert("You lost the game! Score: " + clicks);
+                    window.location.reload();
+                }, 1000);
             }
             else {
+                this.clicks++;
                 var quantity = this.countBombsAround(row, column);
                 //заміняю внутрєнность кнопки (баттон) на другий дів з моїм параметром квонтіті
                 element.parentElement.innerHTML = "<div class='solution'>" + quantity + "<div/>";
@@ -37,8 +41,11 @@ var Animal = (function () {
             }
         }
         else {
-            this.bombs--;
-            this.things[row][column] = false;
+            this.clicks++;
+            if (this.things[row][column] == true) {
+                this.bombs--;
+                this.things[row][column] = false;
+            }
             var quantity = this.countBombsAround(row, column);
             element.parentElement.innerHTML = "<div class='solution'>" + quantity + "<div/>";
             this.checkwin();
@@ -56,13 +63,26 @@ var Animal = (function () {
         return quantity;
     };
     Animal.prototype.checkwin = function () {
-        console.log("bombs: ");
-        console.log(25 - this.bombs);
-        console.log("clicks: ");
-        console.log(this.clicks);
-        if (this.clicks == (24 - this.bombs)) {
-            alert("You win this game! Score: " + this.clicks);
-            window.location.reload();
+        if (this.clicks == (25 - this.bombs)) {
+            this.showResult();
+            var clicks = this.clicks;
+            setTimeout(function () {
+                alert("You won the game! Score: " + clicks);
+                window.location.reload();
+            }, 1000);
+        }
+    };
+    Animal.prototype.showResult = function () {
+        var el;
+        for (var i = 1; i <= 25; i++) {
+            el = document.getElementById("a" + i.toString());
+            if (el) {
+                var row = Number(el.getAttribute("row"));
+                var column = Number(el.getAttribute("column"));
+                if (this.things[row][column] == true) {
+                    el.parentElement.innerHTML = "<div class='solution'>X<div/>";
+                }
+            }
         }
     };
     return Animal;
