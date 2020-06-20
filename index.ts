@@ -1,6 +1,7 @@
 class Animal {
     clicks: number = 0;
     first: boolean = true;
+    bombs: number = 0;
     public things: boolean[][];
     constructor() {
         this.things =[];
@@ -11,6 +12,7 @@ class Animal {
             for(var j: number = 0; j<= 4 ; j++) {
                 if(Math.floor(Math.random() * Math.floor(11))<3){
                     this.things[i][j] = true;
+                    this.bombs++;
                 }else{
                     this.things[i][j] = false;
                 }
@@ -19,26 +21,32 @@ class Animal {
     }
     showGrid(){
         console.log(this.things);
+        console.log(this.bombs);
+        
     }
 
-    handleClick(row:number, column:number) {
+    handleClick(row:number, column:number, element:HTMLElement) {
 
         this.clicks++;
-        console.log("clicks: "+this.clicks);
 
 
         if(this.clicks != 1){
             if(this.things[row][column]==true){
-                console.log("you lose");
+                element.parentElement.innerHTML="<div class='solution'>X<div/>";
+                alert("You lost the game! Score: "+ this.clicks);
+                window.location.reload();
             }else{
                 let quantity = this.countBombsAround(row,column);
-                console.log("quantity: "+quantity);
+                //заміняю внутрєнность кнопки (баттон) на другий дів з моїм параметром квонтіті
+                element.parentElement.innerHTML="<div class='solution'>" + quantity + "<div/>";
+                this.checkwin();
             }
         }else{
+            this.bombs--;
             this.things[row][column]=false;
-
             let quantity = this.countBombsAround(row,column);
-            console.log("quantity: "+quantity);
+            element.parentElement.innerHTML="<div class='solution'>" + quantity + "<div/>";
+            this.checkwin();
         }
     }
 
@@ -54,6 +62,16 @@ class Animal {
         }
         return quantity;
     }
+    checkwin(){
+        console.log("bombs: ");
+        console.log(25-this.bombs);
+        console.log("clicks: ");
+        console.log(this.clicks);
+        if(this.clicks==(24-this.bombs)){
+            alert("You win this game! Score: "+ this.clicks)
+            window.location.reload();
+        }
+    }
     
 }
 
@@ -68,5 +86,5 @@ function takeInfo (id:number)
     //беру целый елемент див, ниже подтверджение что это такое
     //console.log(element)
 
-    dog.handleClick(Number(element.getAttribute("row")), Number(element.getAttribute("column")));
+    dog.handleClick(Number(element.getAttribute("row")), Number(element.getAttribute("column")),element);
 }
