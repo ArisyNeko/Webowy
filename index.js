@@ -34,7 +34,7 @@ var Animal = (function () {
             }
             else {
                 this.clicks++;
-                var quantity = this.countBombsAround(row, column);
+                var quantity = this.countBombsAround(row, column, element);
                 //заміняю внутрєнность кнопки (баттон) на другий дів з моїм параметром квонтіті
                 element.parentElement.innerHTML = "<div class='solution'>" + quantity + "<div/>";
                 this.checkwin();
@@ -46,12 +46,12 @@ var Animal = (function () {
                 this.bombs--;
                 this.things[row][column] = false;
             }
-            var quantity = this.countBombsAround(row, column);
+            var quantity = this.countBombsAround(row, column, element);
             element.parentElement.innerHTML = "<div class='solution'>" + quantity + "<div/>";
             this.checkwin();
         }
     };
-    Animal.prototype.countBombsAround = function (row, column) {
+    Animal.prototype.countBombsAround = function (row, column, element) {
         var quantity = 0;
         for (var i = -1; i < 2; i++) {
             for (var j = -1; j < 2; j++) {
@@ -61,6 +61,14 @@ var Animal = (function () {
             }
         }
         return quantity;
+    };
+    Animal.prototype.reveal = function (row, column) {
+        for (var i = -1; i < 2; i++) {
+            for (var j = -1; j < 2; j++) {
+                if (this.things[row + i] && this.things[row + i][column + j] == true) {
+                }
+            }
+        }
     };
     Animal.prototype.checkwin = function () {
         if (this.clicks == (25 - this.bombs)) {
@@ -89,9 +97,20 @@ var Animal = (function () {
 })();
 var dog = new Animal();
 dog.showGrid();
-function takeInfo(id) {
+function takeInfo(id, event) {
+    console.log(event);
     var element = document.getElementById(id.toString());
-    //беру целый елемент див, ниже подтверджение что это такое
-    //console.log(element)
-    dog.handleClick(Number(element.getAttribute("row")), Number(element.getAttribute("column")), element);
+    if (event.ctrlKey) {
+        if (element.innerHTML == "F") {
+            element.innerHTML = "";
+        }
+        else {
+            element.innerHTML = "F";
+        }
+    }
+    else {
+        if (element.innerHTML !== "F") {
+            dog.handleClick(Number(element.getAttribute("row")), Number(element.getAttribute("column")), element);
+        }
+    }
 }
