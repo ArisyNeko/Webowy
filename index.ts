@@ -1,11 +1,11 @@
-class Animal {
+class Grid {
     clicks: number = 0;
     first: boolean = true;
     bombs: number = 0;
     public things: boolean[][];
     constructor() {
         this.things =[];
-        
+        //bombing
         for(var i: number = 0; i <= 4; i++) {
             this.things[i]=[];
             
@@ -19,19 +19,21 @@ class Animal {
             } 
         }
     }
+
+    //just for our convenience
     showGrid(){
         console.log(this.things);
         console.log(this.bombs);
-        
     }
     
+    //main and first funktion which handling your click
     handleClick(row:number, column:number, element:HTMLElement) {
         if(this.clicks != 0){
             if(this.things[row][column]==true){
                 element.parentElement.innerHTML="<div class='solution'>X<div/>";
                 const clicks = this.clicks;
                 this.showResult();
-                setTimeout(function(){ alert("You lost the game! Score: "+ clicks);
+                setTimeout(function(){ alert("You lost the game! Survived clicks: "+ clicks);
                 window.location.reload();}, 1000);
                 
             }else{
@@ -39,64 +41,78 @@ class Animal {
                 let quantity = this.countBombsAround(row,column,element);
                 //заміняю внутрєнность кнопки (баттон) на другий дів з моїм параметром квонтіті
                 element.parentElement.innerHTML="<div class='solution'>" + quantity + "<div/>";
+                // if(quantity==0){
+                //     for(var i:number = -1; i < 2; i++){
+                //         for(var j:number = -1; j < 2; j++){
+                //             let id = (5*row)+column+1+(i*5)+j;
+                //             let el = document.getElementById("a"+id.toString());
+                //             console.log(el);
+                //             if(el){
+                //                 const row = Number(el.getAttribute("row"));
+                //                 const column = Number(el.getAttribute("column"));
+                //                 this.handleClick(row,column,el);
+                //             }
+                //         }
+                //     }
+                // }
                 this.checkwin();
             }
         }else{
-            this.clicks++;
             if(this.things[row][column]==true){
             this.bombs--;
             this.things[row][column]=false;
             }
+            this.clicks++;
             let quantity = this.countBombsAround(row,column,element);
             element.parentElement.innerHTML="<div class='solution'>" + quantity + "<div/>";
+            
+        // if(quantity==0){
+        //     for(var i:number = -1; i < 2; i++){
+        //         for(var j:number = -1; j < 2; j++){
+        //             let id = (5*row)+column+1+(i*5)+j;
+        //             let el = document.getElementById("a"+id.toString());
+        //             console.log(el);
+        //             if(el){
+        //                 const row = Number(el.getAttribute("row"));
+        //                 const column = Number(el.getAttribute("column"));
+        //                 this.handleClick(row,column,el);
+        //             }
+        //         }
+        //     }
+        // }
             this.checkwin();
         }
     }
 
+    //counts bombs around our button and returns the number, had to reveal all 0oes, but doesn't
     countBombsAround(row:number, column:number, element:HTMLElement){
         let quantity:number = 0;
         for(var i:number = -1; i < 2; i++){
             for(var j:number = -1; j < 2; j++){
-                
                 if(this.things[row+i]&&this.things[row+i][column+j]==true){
                     quantity++;
                 }
-                //console.log("quantity: "+quantity);
-                //if(quantity==0){
-                //    this.handleClick(row+i, column+j, element);
-                //}
             }
         }
         return quantity;
     }
 
-    reveal(row:number, column:number){
-        for(var i:number = -1; i < 2; i++){
-            for(var j:number = -1; j < 2; j++){
-                if(this.things[row+i]&&this.things[row+i][column+j]==true){
-
-                }
-            }
-        }
-    }
-
+    //cheks if we already won
     checkwin(){
         if(this.clicks==(25-this.bombs)){
             this.showResult();
             const clicks = this.clicks;
-            setTimeout(function(){ alert("You won the game! Score: "+ clicks);
+            setTimeout(function(){ alert("You won the game! Survived clicks: "+ clicks);
                 window.location.reload();}, 1000);
         }
     }
 
+    //shows all bombs
     showResult(){
-
-        let el;
         for(var i:number = 1; i<=25;i++){
-
-            el = document.getElementById("a"+i.toString());
+            let el = document.getElementById("a"+i.toString());
+            
             if(el){
-
                 const row = Number(el.getAttribute("row"));
                 const column = Number(el.getAttribute("column"));
                 if(this.things[row][column] == true) {
@@ -108,14 +124,15 @@ class Animal {
 }
 
 
-let dog = new Animal();
-dog.showGrid();
+let game = new Grid();
+game.showGrid();
 
-
-function takeInfo (id:number,event)
+//activating the button
+function takeInfo (id,event)
 {
     console.log(event);
-    let element = document.getElementById(id.toString());
+    let element = document.getElementById(id);
+    //checking what is inside of our button
     if(event.ctrlKey){
         if(element.innerHTML=="F"){
             element.innerHTML = "";
@@ -124,7 +141,7 @@ function takeInfo (id:number,event)
         }
     }else{
         if(element.innerHTML!=="F"){
-            dog.handleClick(Number(element.getAttribute("row")), Number(element.getAttribute("column")),element);
+            game.handleClick(Number(element.getAttribute("row")), Number(element.getAttribute("column")),element);
         }
     }
 }
